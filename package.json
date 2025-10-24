@@ -74,7 +74,8 @@
     "ws": "^8.18.0",
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0",
-    "@rollup/rollup-linux-x64-gnu": "^4.24.4"
+    "@rollup/rollup-linux-x64-gnu": "^4.24.4",
+    "@esbuild/linux-x64": "^0.25.0"
   },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.3.1",
