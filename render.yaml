@@ -2,7 +2,7 @@ services:
   - type: web
     name: edustarform
     runtime: node
-    buildCommand: npm run build
+    buildCommand: rm -rf node_modules package-lock.json && npm install --include=optional && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
