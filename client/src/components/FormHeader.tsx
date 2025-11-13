@@ -10,10 +10,11 @@ export function FormHeader() {
           className="h-16 sm:h-20 mx-auto mb-3"
         />
         <p className="text-lg italic text-primary font-medium">
-          Unleashing Stars Through Education
+          Complete Your BSC or Masters in 2 Years!
         </p>
+        <p>@</p>
         <p className="text-sm text-muted-foreground mt-2">
-          GA-3925815 ADJACENT LAS PALMAS NII BOI TOWN
+          Victorian Institute of Technology (VIT) - Australia.
         </p>
       </div>
     </header>

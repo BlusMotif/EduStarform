@@ -29,11 +29,6 @@ export default function AdminDashboard() {
       "Institution",
       "Field of Study",
       "Graduation Year",
-      "Institutions Preference",
-      "Program Type",
-      "Field of Study Abroad",
-      "Study Reasons",
-      "Funding Method",
       "Challenges",
       "Open to Contact",
       "Contact Method",
@@ -42,10 +37,6 @@ export default function AdminDashboard() {
       "Emergency Email",
       "Emergency Country",
       "Emergency City",
-      "IELTS",
-      "SAT",
-      "PTE",
-      "GRE",
       "Submitted At",
     ];
 
@@ -63,11 +54,6 @@ export default function AdminDashboard() {
       sub.institutionName,
       sub.fieldOfStudy,
       sub.graduationYear,
-      sub.institutionsPreference,
-      sub.programType,
-      sub.fieldOfStudyAbroad,
-      Array.isArray(sub.studyReasons) ? sub.studyReasons.join(", ") : sub.studyReasons,
-      sub.fundingMethod,
       Array.isArray(sub.challenges) ? sub.challenges.join(", ") : sub.challenges,
       sub.openToContact ? "Yes" : "No",
       sub.contactMethod || "",
@@ -76,10 +62,6 @@ export default function AdminDashboard() {
       sub.emergencyEmail,
       sub.emergencyCountry,
       sub.emergencyCity,
-      sub.ieltsScore || "",
-      sub.satScore || "",
-      sub.pteScore || "",
-      sub.greScore || "",
       new Date(sub.createdAt).toLocaleString(),
     ]);
 
@@ -152,7 +134,7 @@ export default function AdminDashboard() {
                       <TableHead>Full Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Nationality</TableHead>
-                      <TableHead>Program Type</TableHead>
+                      <TableHead>Education Level</TableHead>
                       <TableHead>Field of Study</TableHead>
                       <TableHead>Submitted</TableHead>
                     </TableRow>
@@ -171,8 +153,8 @@ export default function AdminDashboard() {
                         </TableCell>
                         <TableCell>{submission.email}</TableCell>
                         <TableCell>{submission.nationality}</TableCell>
-                        <TableCell>{submission.programType}</TableCell>
-                        <TableCell>{submission.fieldOfStudyAbroad}</TableCell>
+                        <TableCell>{submission.educationLevel}</TableCell>
+                        <TableCell>{submission.fieldOfStudy}</TableCell>
                         <TableCell className="text-muted-foreground">
                           {new Date(submission.createdAt).toLocaleDateString()}
                         </TableCell>

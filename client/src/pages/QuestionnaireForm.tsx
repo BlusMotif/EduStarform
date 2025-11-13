@@ -29,34 +29,22 @@ const formSchema = z.object({
   nationality: z.string().min(1, "Nationality is required"),
   currentCountry: z.string().min(1, "Current country is required"),
   passportNumber: z.string().min(3, "Passport number is required"),
-  
+
   // Section 2: Educational Background
   educationLevel: z.string().min(1, "Please select your education level"),
   educationLevelOther: z.string().optional(),
   institutionName: z.string().min(1, "Institution name is required"),
   fieldOfStudy: z.string().min(1, "Field of study is required"),
   graduationYear: z.string().min(4, "Graduation year is required"),
-  
-  // Section 3: Study Abroad Journey
-  institutionsPreference: z.string().min(1, "Please list your preferred institutions"),
-  programType: z.string().min(1, "Please select a program type"),
-  programTypeOther: z.string().optional(),
-  fieldOfStudyAbroad: z.string().min(1, "Field of study abroad is required"),
-  studyReasons: z.array(z.string()).min(1, "Please select at least one reason"),
-  studyReasonsOther: z.string().optional(),
-  fundingMethod: z.string().min(1, "Please select a funding method"),
-  fundingMethodOther: z.string().optional(),
-  
-  // Section 4: Challenges
+
+  // Section 3: Challenges & Insights
   challenges: z.array(z.string()).min(1, "Please select at least one challenge"),
   challengesOther: z.string().optional(),
-  
-  // Section 5: Additional Information
   openToContact: z.boolean(),
   contactMethod: z.string().optional(),
   contactMethodOther: z.string().optional(),
-  
-  // Emergency Contact
+
+  // Section 4: Emergency Contact
   emergencyName: z.string().min(1, "Emergency contact name is required"),
   emergencyContact: z.string().min(1, "Emergency contact number is required"),
   emergencyAddress: z.string().min(1, "Emergency contact address is required"),
@@ -65,12 +53,6 @@ const formSchema = z.object({
   emergencyRelationship: z.string().min(1, "Relationship is required"),
   emergencyProvince: z.string().min(1, "Province/State is required"),
   emergencyCity: z.string().min(1, "City is required"),
-  
-  // Language Tests
-  ieltsScore: z.string().optional(),
-  satScore: z.string().optional(),
-  pteScore: z.string().optional(),
-  greScore: z.string().optional(),
 }).refine(
   (data) => {
     if (data.openToContact && !data.contactMethod) {
@@ -84,51 +66,7 @@ const formSchema = z.object({
   }
 ).refine(
   (data) => {
-    if (data.educationLevel === "Other" && !data.educationLevelOther?.trim()) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: "Please specify your education level",
-    path: ["educationLevelOther"],
-  }
-).refine(
-  (data) => {
-    if (data.programType === "Other" && !data.programTypeOther?.trim()) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: "Please specify your program type",
-    path: ["programTypeOther"],
-  }
-).refine(
-  (data) => {
-    if (data.studyReasons?.includes("Other") && !data.studyReasonsOther?.trim()) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: "Please specify your study reasons",
-    path: ["studyReasonsOther"],
-  }
-).refine(
-  (data) => {
-    if (data.fundingMethod === "Other" && !data.fundingMethodOther?.trim()) {
-      return false;
-    }
-    return true;
-  },
-  {
-    message: "Please specify your funding method",
-    path: ["fundingMethodOther"],
-  }
-).refine(
-  (data) => {
-    if (data.challenges?.includes("Other") && !data.challengesOther?.trim()) {
+    if (data.challenges.includes("Other") && !data.challengesOther?.trim()) {
       return false;
     }
     return true;
@@ -161,31 +99,7 @@ const educationLevels = [
   "Other",
 ];
 
-const programTypes = [
-  "Undergraduate",
-  "Postgraduate",
-  "Short-term course/Exchange program",
-  "Language course",
-  "Other",
-];
 
-const studyReasonsOptions = [
-  "Higher quality education",
-  "Career opportunities",
-  "Cultural experience",
-  "Personal development",
-  "Language improvement",
-  "Scholarships/Financial aid",
-  "Other",
-];
-
-const fundingMethods = [
-  "Self-funded",
-  "Family support",
-  "Scholarship",
-  "Student loan",
-  "Other",
-];
 
 const challengesOptions = [
   "Visa process",
@@ -225,14 +139,6 @@ export default function QuestionnaireForm() {
       institutionName: "",
       fieldOfStudy: "",
       graduationYear: "",
-      institutionsPreference: "",
-      programType: "",
-      programTypeOther: "",
-      fieldOfStudyAbroad: "",
-      studyReasons: [],
-      studyReasonsOther: "",
-      fundingMethod: "",
-      fundingMethodOther: "",
       challenges: [],
       challengesOther: "",
       openToContact: false,
@@ -246,10 +152,6 @@ export default function QuestionnaireForm() {
       emergencyRelationship: "",
       emergencyProvince: "",
       emergencyCity: "",
-      ieltsScore: "",
-      satScore: "",
-      pteScore: "",
-      greScore: "",
     },
   });
 
@@ -281,7 +183,7 @@ export default function QuestionnaireForm() {
     const isValid = await form.trigger(fieldsToValidate as any);
     
     if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, 6));
+      setCurrentStep((prev) => Math.min(prev + 1, 4));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -298,13 +200,9 @@ export default function QuestionnaireForm() {
       case 2:
         return ["educationLevel", "institutionName", "fieldOfStudy", "graduationYear"];
       case 3:
-        return ["institutionsPreference", "programType", "fieldOfStudyAbroad", "studyReasons", "fundingMethod"];
-      case 4:
         return ["challenges"];
-      case 5:
+      case 4:
         return ["emergencyName", "emergencyContact", "emergencyAddress", "emergencyEmail", "emergencyCountry", "emergencyRelationship", "emergencyProvince", "emergencyCity"];
-      case 6:
-        return ["ieltsScore", "satScore", "pteScore", "greScore"];
       default:
         return [];
     }
@@ -590,192 +488,12 @@ export default function QuestionnaireForm() {
               </FormSection>
             )}
 
-            {/* Section 3: Study Abroad Journey */}
+
+
+            {/* Section 3: Challenges & Insights */}
             {currentStep === 3 && (
-              <FormSection 
-                title="Section 3: Study Abroad Journey"
-                description="Share your study abroad preferences and goals"
-              >
-                <FormField
-                  control={form.control}
-                  name="institutionsPreference"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>List of Institutions of Preference <span className="text-destructive">*</span></FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="List your preferred universities or institutions (one per line)"
-                          className="min-h-24"
-                          data-testid="input-institutionsPreference"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="programType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Program Type <span className="text-destructive">*</span></FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          className="space-y-3"
-                          data-testid="radio-programType"
-                        >
-                          {programTypes.map((type) => (
-                            <div key={type} className="flex items-center space-x-2">
-                              <RadioGroupItem value={type} id={type} data-testid={`radio-programType-${type.replace(/\s+/g, '-').toLowerCase()}`} />
-                              <Label htmlFor={type} className="cursor-pointer font-normal">{type}</Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {form.watch("programType") === "Other" && (
-                  <FormField
-                    control={form.control}
-                    name="programTypeOther"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Please specify</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Specify your program type" data-testid="input-programTypeOther" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
-                <FormField
-                  control={form.control}
-                  name="fieldOfStudyAbroad"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Field of Study Abroad <span className="text-destructive">*</span></FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="e.g., Data Science, International Business" 
-                          data-testid="input-fieldOfStudyAbroad"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="studyReasons"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Main Reason for Studying Abroad (select all that apply) <span className="text-destructive">*</span></FormLabel>
-                      <div className="space-y-3">
-                        {studyReasonsOptions.map((reason) => (
-                          <FormField
-                            key={reason}
-                            control={form.control}
-                            name="studyReasons"
-                            render={({ field }) => (
-                              <FormItem className="flex items-center space-x-2 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(reason)}
-                                    onCheckedChange={(checked) => {
-                                      const newValue = checked
-                                        ? [...(field.value || []), reason]
-                                        : field.value?.filter((value) => value !== reason) || [];
-                                      field.onChange(newValue);
-                                    }}
-                                    data-testid={`checkbox-studyReasons-${reason.replace(/\s+/g, '-').toLowerCase()}`}
-                                  />
-                                </FormControl>
-                                <Label className="cursor-pointer font-normal">{reason}</Label>
-                              </FormItem>
-                            )}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {form.watch("studyReasons")?.includes("Other") && (
-                  <FormField
-                    control={form.control}
-                    name="studyReasonsOther"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Please specify</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Specify your reason" data-testid="input-studyReasonsOther" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
-                <FormField
-                  control={form.control}
-                  name="fundingMethod"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How will you fund your studies abroad? <span className="text-destructive">*</span></FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          className="space-y-3"
-                          data-testid="radio-fundingMethod"
-                        >
-                          {fundingMethods.map((method) => (
-                            <div key={method} className="flex items-center space-x-2">
-                              <RadioGroupItem value={method} id={method} data-testid={`radio-fundingMethod-${method.replace(/\s+/g, '-').toLowerCase()}`} />
-                              <Label htmlFor={method} className="cursor-pointer font-normal">{method}</Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {form.watch("fundingMethod") === "Other" && (
-                  <FormField
-                    control={form.control}
-                    name="fundingMethodOther"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Please specify</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Specify your funding method" data-testid="input-fundingMethodOther" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </FormSection>
-            )}
-
-            {/* Section 4: Challenges & Insights */}
-            {currentStep === 4 && (
-              <FormSection 
-                title="Section 4: Challenges & Insights"
+              <FormSection
+                title="Section 3: Challenges & Insights"
                 description="Help us understand potential challenges you may face"
               >
                 <FormField
@@ -896,10 +614,10 @@ export default function QuestionnaireForm() {
               </FormSection>
             )}
 
-            {/* Section 5: Emergency Contact */}
-            {currentStep === 5 && (
-              <FormSection 
-                title="Emergency Contact Details"
+            {/* Section 4: Emergency Contact */}
+            {currentStep === 4 && (
+              <FormSection
+                title="Section 4: Emergency Contact Details"
                 description="Provide information for your emergency contact"
               >
                 <FormField
@@ -1052,91 +770,7 @@ export default function QuestionnaireForm() {
               </FormSection>
             )}
 
-            {/* Section 6: Language Tests */}
-            {currentStep === 6 && (
-              <FormSection
-                title="English Language Test Scores"
-                description="Provide your language test scores (optional)"
-              >
-                <p className="text-sm text-muted-foreground mb-6">
-                  If you have taken any of the following language proficiency tests, please provide your scores.
-                </p>
 
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="ieltsScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>IELTS Score</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="e.g., 7.5"
-                            data-testid="input-ieltsScore"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="satScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>SAT Score</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="e.g., 1450"
-                            data-testid="input-satScore"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="pteScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>PTE Score</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="e.g., 65"
-                            data-testid="input-pteScore"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="greScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>GRE Score</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="e.g., 320"
-                            data-testid="input-greScore"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </FormSection>
-            )}
 
             {/* Navigation Buttons */}
             <div className="flex items-center justify-between gap-4 pt-6">
@@ -1155,7 +789,7 @@ export default function QuestionnaireForm() {
                 <div />
               )}
 
-              {currentStep < 6 ? (
+              {currentStep < 4 ? (
                 <Button
                   type="button"
                   onClick={nextStep}
@@ -1169,7 +803,7 @@ export default function QuestionnaireForm() {
                 <Button
                   type="button"
                   onClick={async () => {
-                    const isValid = await form.trigger(["ieltsScore", "satScore", "pteScore", "greScore"]);
+                    const isValid = await form.trigger(["emergencyName", "emergencyContact", "emergencyAddress", "emergencyEmail", "emergencyCountry", "emergencyRelationship", "emergencyProvince", "emergencyCity"]);
                     if (isValid) {
                       form.handleSubmit(onSubmit)();
                     }

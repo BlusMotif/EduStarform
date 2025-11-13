@@ -23,21 +23,11 @@ export interface ISubmission extends Document {
   fieldOfStudy: string;
   graduationYear: string;
 
-  // Section 3: Study Abroad Journey
-  institutionsPreference: string;
-  programType: string;
-  programTypeOther?: string;
-  fieldOfStudyAbroad: string;
-  studyReasons: string[];
-  studyReasonsOther?: string;
-  fundingMethod: string;
-  fundingMethodOther?: string;
-
-  // Section 4: Challenges & Insights
+  // Section 3: Challenges & Insights
   challenges: string[];
   challengesOther?: string;
 
-  // Section 5: Additional Information
+  // Section 4: Additional Information
   openToContact: boolean;
   contactMethod?: string;
   contactMethodOther?: string;
@@ -51,12 +41,6 @@ export interface ISubmission extends Document {
   emergencyRelationship: string;
   emergencyProvince: string;
   emergencyCity: string;
-
-  // Language Test Scores
-  ieltsScore?: string;
-  satScore?: string;
-  pteScore?: string;
-  greScore?: string;
 
   createdAt: Date;
 }
@@ -81,21 +65,11 @@ const SubmissionSchema = new Schema<ISubmission>({
   fieldOfStudy: { type: String, required: true },
   graduationYear: { type: String, required: true },
 
-  // Section 3: Study Abroad Journey
-  institutionsPreference: { type: String, required: true },
-  programType: { type: String, required: true },
-  programTypeOther: String,
-  fieldOfStudyAbroad: { type: String, required: true },
-  studyReasons: { type: [String], required: true },
-  studyReasonsOther: String,
-  fundingMethod: { type: String, required: true },
-  fundingMethodOther: String,
-
-  // Section 4: Challenges & Insights
+  // Section 3: Challenges & Insights
   challenges: { type: [String], required: true },
   challengesOther: String,
 
-  // Section 5: Additional Information
+  // Section 4: Additional Information
   openToContact: { type: Boolean, required: true, default: false },
   contactMethod: String,
   contactMethodOther: String,
@@ -109,12 +83,6 @@ const SubmissionSchema = new Schema<ISubmission>({
   emergencyRelationship: { type: String, required: true },
   emergencyProvince: { type: String, required: true },
   emergencyCity: { type: String, required: true },
-
-  // Language Test Scores
-  ieltsScore: String,
-  satScore: String,
-  pteScore: String,
-  greScore: String,
 }, {
   timestamps: true,
 });
@@ -141,21 +109,11 @@ export const insertSubmissionSchema = z.object({
   fieldOfStudy: z.string().min(1, "Field of study is required"),
   graduationYear: z.string().min(1, "Graduation year is required"),
 
-  // Section 3: Study Abroad Journey
-  institutionsPreference: z.string().min(1, "Institutions preference is required"),
-  programType: z.string().min(1, "Program type is required"),
-  programTypeOther: z.string().optional(),
-  fieldOfStudyAbroad: z.string().min(1, "Field of study abroad is required"),
-  studyReasons: z.array(z.string()).min(1, "Please select at least one reason"),
-  studyReasonsOther: z.string().optional(),
-  fundingMethod: z.string().min(1, "Funding method is required"),
-  fundingMethodOther: z.string().optional(),
-
-  // Section 4: Challenges & Insights
+  // Section 3: Challenges & Insights
   challenges: z.array(z.string()).min(1, "Please select at least one challenge"),
   challengesOther: z.string().optional(),
 
-  // Section 5: Additional Information
+  // Section 4: Additional Information
   openToContact: z.boolean().default(false),
   contactMethod: z.string().optional(),
   contactMethodOther: z.string().optional(),
@@ -169,12 +127,6 @@ export const insertSubmissionSchema = z.object({
   emergencyRelationship: z.string().min(1, "Emergency relationship is required"),
   emergencyProvince: z.string().min(1, "Emergency province is required"),
   emergencyCity: z.string().min(1, "Emergency city is required"),
-
-  // Language Test Scores
-  ieltsScore: z.string().optional(),
-  satScore: z.string().optional(),
-  pteScore: z.string().optional(),
-  greScore: z.string().optional(),
 }).refine(
   (data) => {
     if (data.openToContact && !data.contactMethod) {

@@ -8,11 +8,9 @@ interface Step {
 
 const steps: Step[] = [
   { number: 1, label: "Personal Details", shortLabel: "Personal" },
-  { number: 2, label: "Education", shortLabel: "Education" },
-  { number: 3, label: "Study Abroad", shortLabel: "Study" },
-  { number: 4, label: "Challenges", shortLabel: "Challenges" },
-  { number: 5, label: "Emergency Contact", shortLabel: "Emergency" },
-  { number: 6, label: "Language Tests", shortLabel: "Tests" },
+  { number: 2, label: "Educational Background", shortLabel: "Education" },
+  { number: 3, label: "Challenges & Insights", shortLabel: "Challenges" },
+  { number: 4, label: "Emergency Contact", shortLabel: "Emergency" },
 ];
 
 interface ProgressIndicatorProps {
